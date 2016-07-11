@@ -33,6 +33,39 @@ describe "Static pages" do
           expect(page).to have_selector("li##{item.id}", text: item.content)
         end
       end
+
+      it "more mocroposts" do
+        expect(page).to have_content("2 microposts")
+      end
+    end
+
+    describe "micropost pluralion" do
+      let(:user) { FactoryGirl.create(:user) }
+      before do
+        FactoryGirl.create(:micropost, user: user, content: "Lorem ipsum")
+        sign_in user
+        visit root_path
+      end
+
+      it "one mocropost" do
+        expect(page).to have_content("1 micropost")
+      end
+    end
+
+    describe "pagination" do
+      let(:user) { FactoryGirl.create(:user) }
+      before do
+        50.times do
+          content = Faker::Lorem.sentence(5)
+          FactoryGirl.create(:micropost, user: user, content: content)
+        end
+        sign_in user
+        visit root_path
+      end
+
+      it "pages" do
+        expect(page).to have_selector("div.pagination", text: "1 2")
+      end
     end
   end
 

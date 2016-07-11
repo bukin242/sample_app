@@ -1,7 +1,17 @@
 <%= form_for(@micropost) do |f| %>
   <%= render 'shared/error_messages', object: f.object %>
+  <i class="left_characters"></i> left characters
   <div class="field">
     <%= f.text_area :content, placeholder: "Compose new micropost..." %>
   </div>
   <%= f.submit "Post", class: "btn btn-large btn-primary" %>
 <% end %>
+
+<script type="text/javascript">
+  max = 140;
+  left_characters = $('#new_micropost .left_characters');
+  left_characters.html(max);
+  $('#new_micropost textarea').on('focus input', function (e) {
+      left_characters.html(max - $(this).val().length);
+  });
+</script>
