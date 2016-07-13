@@ -181,6 +181,22 @@ describe User do
     it { should be_following(other_user) }
     its(:followed_users) { should include(other_user) }
 
+    describe "destroy" do
+      subject do
+        Relationship.where(follower_id: @user.id, followed_id: other_user.id)
+      end
+
+      it "user dependent" do
+        @user.destroy
+        should be_empty
+      end
+
+      it "other user dependent" do
+        other_user.destroy
+        should be_empty
+      end
+    end
+
     describe "followed user" do
       subject { other_user }
       its(:followers) { should include(@user) }

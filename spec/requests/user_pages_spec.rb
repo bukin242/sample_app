@@ -60,11 +60,17 @@ describe "User pages" do
 
   describe "profile page" do
     let(:user) { FactoryGirl.create(:user) }
+    let(:other_user) { FactoryGirl.create(:user) }
 
-    before { visit user_path(user) }
+    before do
+      other_user.follow!(user)
+      visit user_path(user)
+    end
 
     it { should have_content(user.name) }
     it { should have_title(user.name) }
+    it { should have_link("0 following", href: following_user_path(user)) }
+    it { should have_link("1 followers", href: followers_user_path(user)) }
   end
 
   describe "signup" do
